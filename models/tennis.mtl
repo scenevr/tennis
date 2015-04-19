@@ -1,0 +1,28 @@
+#
+## Alias OBJ Material File
+# Exported from SketchUp, (c) 2000-2012 Trimble Navigation Limited
+
+newmtl Sophie_Shirt_Red
+Ka 0.000000 0.000000 0.000000
+Kd 1 1 1
+Ks 0 0 0
+map_Kd /textures/Sophie_Shirt_Red.png
+
+newmtl _1
+Ka 0.000000 0.000000 0.000000
+Kd 1 1 1
+Ks 0 0 0
+map_Kd /textures/_1.png
+
+newmtl _2
+Ka 0.000000 0.000000 0.000000
+Kd 1 1 1
+Ks 0 0 0
+map_Kd /textures/_2.png
+
+newmtl Sophie_Skirt
+Ka 0.000000 0.000000 0.000000
+Kd 1 1 1
+Ks 0 0 0
+map_Kd /textures/Sophie_Skirt.png
+

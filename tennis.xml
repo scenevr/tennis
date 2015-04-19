@@ -1,0 +1,99 @@
+
+<scene>
+
+  <spawn position="0 0 20" />
+
+  <skybox style="color: linear-gradient(#000, #300)" />
+
+  <fog near="100" far="200" style="color: #000" />
+
+  <model src="/models/tennis.obj" mtl="/models/tennis.mtl" position="-6 0.04 13.2" style="collision: none" />
+
+  <box id="net" position="0 0 0" scale="12 1.6 0.1" style="color: #f0a; visibility: hidden" />
+
+  <plane position="20 0.02 20" style="color: black;" scale="2000 2000 0" rotation="-1.57079632 0 0" />
+
+  <plane position="0 4.7 -26" rotation="0 0 0" style="texture-map: url(/textures/distance.png); texture-repeat: 40 1" scale="400 10 0" />
+  <plane position="0 4.7 26" rotation="0 3.14 0" style="texture-map: url(/textures/distance.png); texture-repeat: 40 1" scale="400 10 0" />
+
+  <script src="scenequery.js" />
+
+  <audio id="hit" src="/sounds/hit.mp3" position="0 0 0" />
+  <audio id="out" src="/sounds/out.mp3" position="0 0 0" />
+
+  <billboard position="-20 1 0" scale="2 2 0.2" rotation="0 1.57 0">
+    <![CDATA[
+      <center style="margin: 40px 30px; font-size: 1.3em">
+        The Virtual Boy was a 32-bit table-top 3D video game console developed and manufactured by Nintendo. It was marketed as the first "portable" video game console capable of displaying "true 3D graphics" out of the box. It was released in 1995 in Japan at a price of around US$180. It proved to be a commercial failure and was not released in other regions.
+      </center>
+    ]]>
+  </billboard>
+
+  <billboard position="-20 1 4" scale="2 2 0.2" rotation="0 1.57 0">
+    <![CDATA[
+      <center style="margin-top: 60px">
+        <img src="/images/virtual-boy.png" />
+      </center>
+    ]]>
+  </billboard>
+
+  <script>
+    <![CDATA[
+
+    var courtSize = new Vector(12, 0, 26).multiplyScalar(0.5);
+    var netSize = $('#net').scale().clone().multiplyScalar(0.5);
+    var scale = new Vector(0.2, 0.2, 0.2);
+    var gravity = new Vector(0, -0.01, 0);
+
+    var p = new Vector(0, 0, 0);
+    var v;
+
+    var box = $("<box />").css('color', '#ff0000').position(p).scale(scale).appendTo(document.scene);
+
+    function serve() {
+      p = new Vector(0, 1.2, -2);
+      v = new Vector(0, 0, 0.5);
+      box.position(p);
+    }
+
+    box.collide(function (e) {
+      $("#hit")[0].play();
+
+      v.z = -v.z;
+      v.y = 0.1;
+      v.x += e.normal.x / 10;
+    });
+
+    function out() {
+      $("#out")[0].play();
+
+      serve();
+    }
+
+    serve();
+
+    setInterval(function () {
+      v.add(gravity);
+
+      if ((p.y < scale.y) && (v.y < 0 )) {
+        v.y = -v.y * 0.9;
+      }
+
+      if (p.x < -courtSize.x) {
+        out();
+      } else if (p.x > courtSize.x) {
+        out();
+      } else if (p.z < -courtSize.z) {
+        out();
+      } else if (p.z > courtSize.z) {
+        out();
+      } else if (p.z < netSize.z && p.z > -netSize.z && p.y < netSize.y) {
+        // hit the net
+        out();
+      }
+
+      box.position(p.add(v));
+    }, 1000 / document.scene.ticksPerSecond);
+    ]]>
+  </script>
+</scene>
